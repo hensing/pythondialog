@@ -261,9 +261,9 @@ in a given situation.
 def _OSErrorHandling():
     try:
         yield
-    except OSError, e:
+    except OSError as e:
         raise PythonDialogOSError(unicode(e))
-    except IOError, e:
+    except IOError as e:
         raise PythonDialogIOError(unicode(e))
 
 
@@ -276,7 +276,7 @@ try:
         r"(?P<day>\d\d)/(?P<month>\d\d)/(?P<year>\d\d\d\d)$")
     _timebox_time_cre = re.compile(
         r"(?P<hour>\d\d):(?P<minute>\d\d):(?P<second>\d\d)$")
-except re.error, e:
+except re.error as e:
     raise PythonDialogReModuleError(unicode(e))
 
 
@@ -505,7 +505,7 @@ def _to_onoff(val):
                 return "on"
             elif _off_cre.match(val):
                 return "off"
-        except re.error, e:
+        except re.error as e:
             raise PythonDialogReModuleError(unicode(e))
 
     raise BadPythonDialogUsage("invalid boolean value: {0!r}".format(val))
@@ -638,7 +638,7 @@ class DialogBackendVersion(BackendVersion):
     try:
         _backend_version_cre = re.compile(r"""(?P<dotted> (\d+) (\.\d+)* )
                                               (?P<rest>.*)$""", re.VERBOSE)
-    except re.error, e:
+    except re.error as e:
         raise PythonDialogReModuleError(unicode(e))
 
     def __init__(self, dotted_part_or_str, rest=""):
@@ -697,7 +697,7 @@ class DialogBackendVersion(BackendVersion):
                 raise UnableToParseDialogBackendVersion(s)
             dotted_part = [ int(x) for x in mo.group("dotted").split(".") ]
             rest = mo.group("rest")
-        except re.error, e:
+        except re.error as e:
             raise PythonDialogReModuleError(unicode(e))
 
         return cls(dotted_part, rest)
@@ -806,7 +806,7 @@ class Dialog(object):
                                         re.VERBOSE)
         _print_version_cre = re.compile(
             r"^Version:[ \t]+(?P<version>.+?)[ \t]*$", re.MULTILINE)
-    except re.error, e:
+    except re.error as e:
         raise PythonDialogReModuleError(unicode(e))
 
     # DIALOG_OK, DIALOG_CANCEL, etc. are environment variables controlling
@@ -1839,7 +1839,7 @@ by :program:`dialog`.
                     raise UnableToRetrieveBackendVersion(
                         "unable to parse the output of '{0} --print-version': "
                         "{1!r}".format(self._dialog_prg, output))
-            except re.error, e:
+            except re.error as e:
                 raise PythonDialogReModuleError(unicode(e))
         else:
             raise UnableToRetrieveBackendVersion(
@@ -1875,7 +1875,7 @@ by :program:`dialog`.
                     raise PythonDialogBug(
                         "Unable to parse the output of '{0} --print-maxsize': "
                         "{1!r}".format(self._dialog_prg, output))
-            except re.error, e:
+            except re.error as e:
                 raise PythonDialogReModuleError(unicode(e))
         else:
             return None
@@ -1986,7 +1986,7 @@ by :program:`dialog`.
     def _calendar_parse_date(self, date_str):
         try:
             mo = _calendar_date_cre.match(date_str)
-        except re.error, e:
+        except re.error as e:
             raise PythonDialogReModuleError(unicode(e))
 
         if not mo:
@@ -3619,7 +3619,7 @@ by :program:`dialog`.
     def _timebox_parse_time(self, time_str):
         try:
             mo = _timebox_time_cre.match(time_str)
-        except re.error, e:
+        except re.error as e:
             raise PythonDialogReModuleError(unicode(e))
 
         if not mo:
